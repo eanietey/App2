@@ -1,0 +1,15 @@
+<script setup>
+import Grid from './components/Grid.vue';
+
+
+</script>
+
+<template>
+  <Grid>
+
+  </Grid>
+</template>
+
+<style scoped>
+
+</style>
