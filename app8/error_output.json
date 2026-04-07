@@ -1,1 +1,0 @@
-{"errorLabelSet":{},"errorResponse":{"index":0,"code":11000,"errmsg":"E11000 duplicate key error collection: test.users index: email_1 dup key: { email: \"testzz123@test.com\" }","keyPattern":{"email":1},"keyValue":{"email":"testzz123@test.com"}},"index":0,"code":11000,"keyPattern":{"email":1},"keyValue":{"email":"testzz123@test.com"}}
