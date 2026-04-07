@@ -1,0 +1,1 @@
+{"errorLabelSet":{},"errorResponse":{"index":0,"code":11000,"errmsg":"E11000 duplicate key error collection: test.users index: username_1 dup key: { username: \"alpha123\" }","keyPattern":{"username":1},"keyValue":{"username":"alpha123"}},"index":0,"code":11000,"keyPattern":{"username":1},"keyValue":{"username":"alpha123"}}

@@ -5,11 +5,9 @@ import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore()
 const currentUser = computed(() => userStore.user.username)
 
-// Load state from localStorage on script setup
 const globalRequests = ref(JSON.parse(localStorage.getItem('friendRequests')) || {})
 const allFriends = ref(JSON.parse(localStorage.getItem('friendships')) || {})
 
-// Auto-save to localStorage whenever the values change
 watch(globalRequests, (val) => localStorage.setItem('friendRequests', JSON.stringify(val)), { deep: true })
 watch(allFriends, (val) => localStorage.setItem('friendships', JSON.stringify(val)), { deep: true })
 
@@ -26,16 +24,13 @@ const incomingRequests = computed(() => {
 })
 
 function acceptRequest(user) {
-  // Remove from our incoming requests
   if (globalRequests.value[currentUser.value]) {
     globalRequests.value[currentUser.value] = globalRequests.value[currentUser.value].filter(u => u !== user)
   }
 
-  // Initialize friendship arrays if empty
   if (!allFriends.value[currentUser.value]) allFriends.value[currentUser.value] = []
   if (!allFriends.value[user]) allFriends.value[user] = []
 
-  // Bi-directionally push them
   if (!allFriends.value[currentUser.value].includes(user)) {
     allFriends.value[currentUser.value].push(user)
   }
@@ -74,7 +69,6 @@ function sendFriendRequest() {
     return
   }
 
-  // Initialize targets queues
   if (!globalRequests.value[target]) globalRequests.value[target] = []
   if (!allFriends.value[currentUser.value]) allFriends.value[currentUser.value] = []
 

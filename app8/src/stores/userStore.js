@@ -27,7 +27,12 @@ export const useUserStore = defineStore('userStore', () => {
         if (result.errors) {
             Object.values(result.errors).forEach(err => errors.push(err.message))
         } else if (response.status === 409) {
-            errors.push('Account with this username already exists')
+            if (result.errorResponse && result.errorResponse.keyValue) {
+                const dupField = Object.keys(result.errorResponse.keyValue)[0];
+                errors.push(`Account with this ${dupField} already exists`);
+            } else {
+                errors.push('Account with this username or email already exists');
+            }
         } else {
             errors.push('Error creating account')
         }
