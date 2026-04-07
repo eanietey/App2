@@ -5,17 +5,16 @@ import { users } from '@/data/data.js';
 
 const userStore = useUserStore()
 
-// Dynamically list all other users from the database as friends
 const friends = computed(() => {
   // New users start with no friends
   if (!['emmanuel', 'john123'].includes(userStore.user.username)) {
     return []
   }
-  
+
   // Original hardcoded users only see each other
   return users
-    .filter(user => 
-      user.username !== userStore.user.username && 
+    .filter(user =>
+      user.username !== userStore.user.username &&
       ['emmanuel', 'john123'].includes(user.username)
     )
     .map(user => user.username)
@@ -47,7 +46,7 @@ const searchError = ref('')
 function sendFriendRequest() {
   const target = searchQuery.value.trim()
   if (!target) return
-  
+
   if (target === userStore.user.username) {
     searchError.value = "You cannot add yourself"
     return

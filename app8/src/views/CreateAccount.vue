@@ -44,14 +44,14 @@ async function createAccount() {
   apiErrors.value = []
   if (hasErrors.value) return;
 
-  const newUser = { 
-    username: username.value, 
+  const newUser = {
+    username: username.value,
     password: password.value,
     firstName: firstName.value,
     lastName: lastName.value,
     email: email.value
   }
-  
+
   const result = await userStore.createAccount(newUser)
   if (result.success) {
       router.push({ path: '/login', query: { created: 'true' } })
@@ -171,6 +171,7 @@ async function createAccount() {
   border-radius: 8px;
   flex-direction: column;
   transition: all 0.5s ease;
+  padding: 30px 0;
 }
 
 .no-width{

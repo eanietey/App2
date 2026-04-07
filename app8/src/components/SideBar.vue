@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 
 const userStore = useUserStore()
@@ -7,10 +7,14 @@ const currentUser = computed(() => userStore.user.username)
 
 // Load state from localStorage on script setup
 const globalRequests = ref(JSON.parse(localStorage.getItem('friendRequests')) || {})
-const globalFriends = ref(JSON.parse(localStorage.getItem('friendships')) || {})
+const allFriends = ref(JSON.parse(localStorage.getItem('friendships')) || {})
+
+// Auto-save to localStorage whenever the values change
+watch(globalRequests, (val) => localStorage.setItem('friendRequests', JSON.stringify(val)), { deep: true })
+watch(allFriends, (val) => localStorage.setItem('friendships', JSON.stringify(val)), { deep: true })
 
 const friends = computed(() => {
-  return globalFriends.value[currentUser.value] || []
+  return allFriends.value[currentUser.value] || []
 })
 
 function selectFriend(friend) {
@@ -21,37 +25,41 @@ const incomingRequests = computed(() => {
   return globalRequests.value[currentUser.value] || []
 })
 
-function saveToLocalStorage() {
-  localStorage.setItem('friendRequests', JSON.stringify(globalRequests.value))
-  localStorage.setItem('friendships', JSON.stringify(globalFriends.value))
-}
-
 function acceptRequest(user) {
   // Remove from our incoming requests
   if (globalRequests.value[currentUser.value]) {
     globalRequests.value[currentUser.value] = globalRequests.value[currentUser.value].filter(u => u !== user)
   }
-  
+
   // Initialize friendship arrays if empty
-  if (!globalFriends.value[currentUser.value]) globalFriends.value[currentUser.value] = []
-  if (!globalFriends.value[user]) globalFriends.value[user] = []
-  
+  if (!allFriends.value[currentUser.value]) allFriends.value[currentUser.value] = []
+  if (!allFriends.value[user]) allFriends.value[user] = []
+
   // Bi-directionally push them
-  if (!globalFriends.value[currentUser.value].includes(user)) {
-    globalFriends.value[currentUser.value].push(user)
+  if (!allFriends.value[currentUser.value].includes(user)) {
+    allFriends.value[currentUser.value].push(user)
   }
-  if (!globalFriends.value[user].includes(currentUser.value)) {
-    globalFriends.value[user].push(currentUser.value)
+  if (!allFriends.value[user].includes(currentUser.value)) {
+    allFriends.value[user].push(currentUser.value)
   }
-  
-  saveToLocalStorage()
 }
 
 function rejectRequest(user) {
   if (globalRequests.value[currentUser.value]) {
     globalRequests.value[currentUser.value] = globalRequests.value[currentUser.value].filter(u => u !== user)
   }
-  saveToLocalStorage()
+}
+
+function removeFriend(user) {
+  if (allFriends.value[currentUser.value]) {
+    allFriends.value[currentUser.value] = allFriends.value[currentUser.value].filter(u => u !== user)
+  }
+  if (allFriends.value[user]) {
+    allFriends.value[user] = allFriends.value[user].filter(u => u !== currentUser.value)
+  }
+  if (userStore.selectedFriend === user) {
+    userStore.selectedFriend = null
+  }
 }
 
 const searchQuery = ref('')
@@ -60,7 +68,7 @@ const searchError = ref('')
 function sendFriendRequest() {
   const target = searchQuery.value.trim()
   if (!target) return
-  
+
   if (target === currentUser.value) {
     searchError.value = "You cannot add yourself"
     return
@@ -68,11 +76,10 @@ function sendFriendRequest() {
 
   // Initialize targets queues
   if (!globalRequests.value[target]) globalRequests.value[target] = []
-  if (!globalFriends.value[currentUser.value]) globalFriends.value[currentUser.value] = []
+  if (!allFriends.value[currentUser.value]) allFriends.value[currentUser.value] = []
 
-  if (!globalRequests.value[target].includes(currentUser.value) && !globalFriends.value[currentUser.value].includes(target)) {
+  if (!globalRequests.value[target].includes(currentUser.value) && !allFriends.value[currentUser.value].includes(target)) {
     globalRequests.value[target].push(currentUser.value)
-    saveToLocalStorage()
     searchError.value = ''
     searchQuery.value = ''
     alert(`Friend request sent to ${target}!`)
@@ -86,16 +93,20 @@ function sendFriendRequest() {
   <div class="display">
     <div class="friend">
       <h3>Friend List</h3>
+      <p v-if="friends.length === 0" class="empty-placeholder">No friends yet.</p>
        <div
       v-for="friend in friends"
       :key="friend"
       class="friend-user"
       @click="selectFriend(friend)"
     >
-      {{ friend }}</div>
+      <span class="friend-name">{{ friend }}</span>
+      <button @click.stop="removeFriend(friend)" class="btn-remove-friend" title="Remove Friend">✕</button>
+    </div>
     </div>
     <div class="friend-request">
       <h3>Friend Requests</h3>
+      <p v-if="incomingRequests.length === 0" class="empty-placeholder">No pending requests.</p>
       <div v-for="req in incomingRequests" :key="req" class="request-item">
         <span>{{ req }}</span>
         <div class="req-actions">
@@ -138,6 +149,14 @@ body{
   overflow: hidden;
 }
 
+.empty-placeholder {
+  color: #94a3b8;
+  font-size: 13px;
+  text-align: center;
+  font-style: italic;
+  margin: 10px 0;
+}
+
 .friend{
   width: 100%;
   height: 33.33%;
@@ -151,6 +170,7 @@ body{
 .friend-user{
  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
   width: 70%;
   padding: 14px 18px;
@@ -173,6 +193,30 @@ body{
   background: #e0f2fe;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+
+.friend-name {
+  flex-grow: 1;
+}
+
+.btn-remove-friend {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove-friend:hover {
+  background-color: #fecaca;
+  color: #dc2626;
 }
 
 .friend-request{

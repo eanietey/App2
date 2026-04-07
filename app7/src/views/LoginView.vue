@@ -143,7 +143,7 @@ function login() {
 
 <style scoped>
 .login-page{
-  background-color: #e0f2fe; /* Light blue */
+  background-color: #e0f2fe;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -153,7 +153,7 @@ function login() {
 
 .login-tab{
   height: 300px;
-  background-color: #f8fafc; /* Very light grey */
+  background-color: #f8fafc;
   padding: 20px;
   display: flex;
   gap: 10px;

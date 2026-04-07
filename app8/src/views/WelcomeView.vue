@@ -12,13 +12,16 @@
 
 <style scoped>
 .view{
-  height: 100vh;
-  width: 100%;
+  position: absolute;
+  top: 60px; /* height of navbar */
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: #e0f2fe;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .logo{
