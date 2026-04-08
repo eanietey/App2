@@ -17,9 +17,7 @@ const finalFilteredMessages = computed(() => {
   return store.messages.filter(msg => {
     return (
       msg.username === userStore.user.username ||
-       msg.username === selectedFriend.value
-      // msg.firstName === selectedFriend.value ||
-      // msg.lastName === selectedFriend.value
+      msg.username === selectedFriend.value
     )
   })
 })
@@ -38,21 +36,6 @@ function sendMessage() {
   }
 }
 
-// function redact(index) {
-//   const msg = displayMessages.value[index]
-//   const originalIndex = store.messages.indexOf(msg)
-//   if (originalIndex !== -1) {
-//     store.redactMessage(originalIndex)
-//   }
-// }
-
-// function unredact(index) {
-//   const msg = displayMessages.value[index]
-//   const originalIndex = store.messages.indexOf(msg)
-//   if (originalIndex !== -1) {
-//     store.unredactMessage(originalIndex)
-//   }
-// }
 
 function isOwn(msg) {
   return msg.username === userStore.user.username
@@ -86,12 +69,6 @@ function isOwn(msg) {
               </template>
             </div>
             <div v-if="isOwn(msg)" class="message-actions">
-              <!-- <button v-if="!msg.redacted" class="action-btn redact-btn" @click="redact(index)">
-                Redact
-              </button>
-              <button v-else class="action-btn unredact-btn" @click="unredact(index)">
-                Unredact
-              </button> -->
             </div>
           </div>
         </div>

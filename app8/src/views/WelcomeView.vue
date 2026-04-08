@@ -13,7 +13,7 @@
 <style scoped>
 .view{
   position: absolute;
-  top: 60px; /* height of navbar */
+  top: 60px;
   bottom: 0;
   left: 0;
   right: 0;

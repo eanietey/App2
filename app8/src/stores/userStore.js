@@ -4,7 +4,10 @@ import {reactive, ref} from 'vue'
 export const useUserStore = defineStore('userStore', () => {
   const user = reactive({
     username: localStorage.getItem('username') || '',
-    authToken: localStorage.getItem('authToken') || ''
+    authToken: localStorage.getItem('authToken') || '',
+    firstName: localStorage.getItem('firstName') || '',
+    lastName: localStorage.getItem('lastName') || '',
+    email: localStorage.getItem('email') || ''
   })
   
   const selectedFriend = ref(null)
@@ -64,8 +67,15 @@ export const useUserStore = defineStore('userStore', () => {
         const result = await response.json()
         user.username = result.user.username
         user.authToken = result.authToken
+        user.firstName = result.user.firstName || ''
+        user.lastName = result.user.lastName || ''
+        user.email = result.user.email || ''
+
         localStorage.setItem('username', result.user.username)
         localStorage.setItem('authToken', result.authToken)
+        localStorage.setItem('firstName', user.firstName)
+        localStorage.setItem('lastName', user.lastName)
+        localStorage.setItem('email', user.email)
         
         return { success: true }
     } catch (error) {
