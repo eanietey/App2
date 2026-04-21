@@ -3,6 +3,7 @@ import {reactive, ref} from 'vue'
 
 export const useUserStore = defineStore('userStore', () => {
   const user = reactive({
+    userId: localStorage.getItem('userId') || '',
     username: localStorage.getItem('username') || '',
     authToken: localStorage.getItem('authToken') || '',
     firstName: localStorage.getItem('firstName') || '',
@@ -11,6 +12,28 @@ export const useUserStore = defineStore('userStore', () => {
   })
   
   const selectedFriend = ref(null)
+
+  function authHeaders() {
+    return {
+      'Authorization': `Bearer ${user.authToken}`,
+      'Content-Type': 'application/json'
+    }
+  }
+
+  
+  async function searchUsers(query = '') {
+    const host = 'https://stingray-app-u3bsh.ondigitalocean.app'
+    try {
+      const url = query ? `${host}/users?search=${encodeURIComponent(query)}` : `${host}/users`
+      const response = await fetch(url, { headers: authHeaders() })
+      if (!response.ok) return []
+      const data = await response.json()
+      return data.users || []
+    } catch (e) {
+      console.error('Network error searching users', e)
+      return []
+    }
+  }
 
   async function createAccount(newUser) {
     const host = 'https://stingray-app-u3bsh.ondigitalocean.app'
@@ -65,14 +88,16 @@ export const useUserStore = defineStore('userStore', () => {
         }
 
         const result = await response.json()
+        user.userId = result.user._id || ''
         user.username = result.user.username
         user.authToken = result.authToken
         user.firstName = result.user.firstName || ''
         user.lastName = result.user.lastName || ''
         user.email = result.user.email || ''
 
-        localStorage.setItem('username', result.user.username)
-        localStorage.setItem('authToken', result.authToken)
+        localStorage.setItem('userId', user.userId)
+        localStorage.setItem('username', user.username)
+        localStorage.setItem('authToken', user.authToken)
         localStorage.setItem('firstName', user.firstName)
         localStorage.setItem('lastName', user.lastName)
         localStorage.setItem('email', user.email)
@@ -84,5 +109,6 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
-  return {user, selectedFriend, createAccount, login}
+  return {user, selectedFriend, authHeaders, searchUsers, createAccount, login}
 })
+

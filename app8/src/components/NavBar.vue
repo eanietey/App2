@@ -30,13 +30,13 @@ function signOut() {
     localStorage.removeItem('firstName')
     localStorage.removeItem('lastName')
     localStorage.removeItem('email')
-    
+
     userStore.user.username = ''
     userStore.user.authToken = ''
     userStore.user.firstName = ''
     userStore.user.lastName = ''
     userStore.user.email = ''
-    
+
     router.push('/login')
   }
 }
@@ -47,7 +47,7 @@ function signOut() {
     <div class="header">
       <div class="name">
         <span class="link1">
-          <RouterLink to="/welcomepage">Frapp</RouterLink>
+          <RouterLink to="/welcomepage" class="logo">Frapp</RouterLink>
         </span>
       </div>
       <div class="opt">
@@ -94,6 +94,12 @@ function signOut() {
 </template>
 
 <style scoped>
+.logo{
+  color: black;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 35px;
+}
 nav {
   width: 100%;
   height: 60px;

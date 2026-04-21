@@ -6,5 +6,6 @@ export default class Message {
     this.message = message
     this.redacted = false
     this.originalMessage = message
+    this.createdAt = new Date().toISOString()
   }
 }

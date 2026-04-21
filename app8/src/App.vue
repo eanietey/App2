@@ -9,6 +9,14 @@ import NavBar from './components/NavBar.vue';
  </div>
 </template>
 
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+</style>
+
 <style scoped>
 *{
   box-sizing: border-box;
@@ -20,7 +28,4 @@ html, body, #app {
   width: 100%;
   height: 100vh;
 }
-
-
-
 </style>

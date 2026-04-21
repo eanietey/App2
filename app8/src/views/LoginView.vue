@@ -230,8 +230,8 @@ button:hover {
 }
 
 .success-message {
-  color: #10b981; /* emerald-500 */
-  background-color: #ecfdf5; /* emerald-50 */
+  color: #10b981;
+  background-color: #ecfdf5;
   padding: 8px;
   border-radius: 4px;
   font-size: 13px;

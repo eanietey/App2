@@ -1,0 +1,44 @@
+{
+  "userA": {
+    "_id": "69e6f88d58152c10575c5064",
+    "firstName": "A",
+    "lastName": "A",
+    "email": "test_a@foo.com",
+    "username": "test_a",
+    "chat_sessions": [
+      "69e6fbcc58152c10575c510b",
+      "69e6fbfc58152c10575c5113"
+    ],
+    "requests": [],
+    "friends": []
+  },
+  "userB2": {
+    "_id": "69e6fce958152c10575c5118",
+    "firstName": "B",
+    "lastName": "B",
+    "email": "test_b@foo.com",
+    "username": "test_b",
+    "chat_sessions": [],
+    "requests": [
+      {
+        "chat": {
+          "name": "My Group",
+          "chatId": "69e6fbcc58152c10575c510b"
+        },
+        "sender": {
+          "username": "test_a",
+          "userId": "69e6f88d58152c10575c5064"
+        },
+        "receiver": {
+          "username": "test_b",
+          "userId": "69e6fce958152c10575c5118"
+        },
+        "_id": "69e6fcea58152c10575c5125",
+        "kind": "ChatInvite",
+        "createdAt": "2026-04-21T04:28:26.269Z",
+        "updatedAt": "2026-04-21T04:28:26.269Z"
+      }
+    ],
+    "friends": []
+  }
+}

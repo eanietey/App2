@@ -1,0 +1,34 @@
+{
+  "chat": {
+    "message_buckets": [],
+    "users": [
+      {
+        "username": "test_a",
+        "user_id": "69e6f88d58152c10575c5064",
+        "_id": "69e6fbfc58152c10575c5114"
+      }
+    ],
+    "_id": "69e6fbfc58152c10575c5113",
+    "chat_type": "GroupChat",
+    "group_name": "My Group",
+    "owner": {
+      "username": "test_a",
+      "user_id": "69e6f88d58152c10575c5064"
+    },
+    "invited_users": [],
+    "__v": 0
+  },
+  "user": {
+    "_id": "69e6f88d58152c10575c5064",
+    "firstName": "A",
+    "lastName": "A",
+    "email": "test_a@foo.com",
+    "username": "test_a",
+    "chat_sessions": [
+      "69e6fbcc58152c10575c510b",
+      "69e6fbfc58152c10575c5113"
+    ],
+    "requests": [],
+    "friends": []
+  }
+}
