@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import { useMessageStore } from '@/stores/messageStore'
 import { useChatStore } from '@/stores/chatStore'
@@ -13,6 +13,14 @@ const newFriendMessage = ref('')
 const newGroupMessage = ref('')
 const newInviteUsername = ref('')
 const isInviting = ref(false)
+const friendMessagesContainer = ref(null)
+const groupMessagesContainer = ref(null)
+
+const scrollToBottom = (container) => {
+  if (container) {
+    container.scrollTop = container.scrollHeight
+  }
+}
 
 const selectedFriend = computed(() => userStore.selectedFriend)
 const activeChatId = computed(() => chatStore.activeChatId)
@@ -24,6 +32,19 @@ const displayFriendMessages = computed(() => {
     return (msg.username === userStore.user.username || msg.username === selectedFriend.value)
   })
 })
+
+const displayGroupMessages = computed(() => {
+  if (!activeChatId.value) return []
+  return chatStore.messages[activeChatId.value] || []
+})
+
+watch(displayFriendMessages, () => {
+  nextTick(() => scrollToBottom(friendMessagesContainer.value))
+}, { deep: true })
+
+watch(displayGroupMessages, () => {
+  nextTick(() => scrollToBottom(groupMessagesContainer.value))
+}, { deep: true })
 
 function sendFriendMessage() {
   const text = newFriendMessage.value.trim()
@@ -38,10 +59,6 @@ function isOwnFriendMsg(msg) {
 }
 
 
-const displayGroupMessages = computed(() => {
-  if (!activeChatId.value) return []
-  return chatStore.messages[activeChatId.value] || []
-})
 
 function isOwnGroupMsg(msg) {
   return msg.sender === userStore.user.userId
@@ -110,7 +127,7 @@ onUnmounted(() => {
         </div>
       </header>
 
-      <div class="messages-container">
+      <div class="messages-container" ref="friendMessagesContainer">
         <div
           v-for="(msg, index) in displayFriendMessages"
           :key="index"
@@ -172,7 +189,7 @@ onUnmounted(() => {
         </div>
       </header>
 
-      <div class="messages-container custom-scrollbar">
+      <div class="messages-container custom-scrollbar" ref="groupMessagesContainer">
         <div
           v-for="msg in displayGroupMessages"
           :key="msg._id"
