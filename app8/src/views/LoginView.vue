@@ -17,7 +17,7 @@ const hasErrors = computed(() => !username.value.trim() || !password.value.trim(
 
 async function login() {
   apiError.value = ''
-  
+
   const trimmedUsername = username.value.trim()
   const trimmedPassword = password.value.trim()
 
@@ -41,7 +41,7 @@ async function login() {
   if (result.success) {
     router.push('/homepage')
   } else {
-    apiError.value = 'invalid credentials'
+    apiError.value = 'Invalid credentials'
   }
 }
 
@@ -54,6 +54,9 @@ async function login() {
         <div class="login-header">
           <h1>Log In</h1>
           <h5> Welcome to Frapp</h5>
+        </div>
+        <div v-if="apiError" class="error-msg">
+          {{ apiError }}
         </div>
         <div v-if="isCreated" class="success-message">
           An account has been created, please log in.
@@ -72,10 +75,6 @@ async function login() {
             />
           </div>
           <button @click="login">Sign in</button>
-          
-          <div v-if="apiError" class="error-msg">
-            {{ apiError }}
-          </div>
       </div>
     </div>
   </div>
@@ -129,7 +128,7 @@ async function login() {
 }
 
 .error-msg {
-  color: #fecaca;
+  color: red;
   font-size: 14px;
   margin-top: 10px;
   font-weight: 500;
