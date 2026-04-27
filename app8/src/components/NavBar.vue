@@ -58,7 +58,7 @@ function signOut() {
 
           <template v-if="showSignOut">
             <span class="username-display" @click="toggleProfile" title="View Profile">
-              {{ userStore.user.username }}
+              Profile
             </span>
             <button class="signout" @click="signOut"> Sign Out </button>
           </template>
@@ -70,7 +70,7 @@ function signOut() {
       <div v-if="showProfile" class="background-blur" @click.self="showProfile = false">
         <div class="profile-card">
           <div class="profile-header">
-            <h3>User Profile</h3>
+            <h3>{{ userStore.user.username }}'s Profile</h3>
             <button class="close-btn" @click="showProfile = false">×</button>
           </div>
           <div class="profile-info">
